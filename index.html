@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Recepio — la réception de vos factures électroniques, sans y passer vos semaines</title>
+<meta name="description" content="Depuis le 1er septembre 2026, toute entreprise assujettie à la TVA en France doit pouvoir recevoir des factures électroniques (Factur-X, UBL, CII) via une plateforme agréée. Les PDF arrivent encore par mail. Recepio réceptionne, normalise et trie les deux flux dans votre comptabilité — à partir de 29 €/mois.">
+<style>
+:root{--bg:#0e141c;--bg2:#111a24;--card:#16202c;--line:#24344a;--fg:#eaf0f8;--mut:#97a7bd;--acc:#3d8bff;--acc2:#2b6fe0;--acc-soft:rgba(61,139,255,.12);--acc-glow:rgba(61,139,255,.28);--ok:#3ddc97;--bad:#ff5d5d}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--fg);font-family:'Segoe UI',system-ui,-apple-system,sans-serif;line-height:1.7;overflow-x:hidden}
+main{max-width:1024px;margin:0 auto;padding:40px 22px 80px}
+header{text-align:center;padding:44px 0 12px;position:relative;background:
+  radial-gradient(620px 320px at 50% -120px, rgba(61,139,255,.2), transparent 70%),
+  radial-gradient(420px 220px at 12% 8%, rgba(43,111,224,.12), transparent 70%)}
+.eyebrow{display:inline-block;font-size:.74rem;letter-spacing:.16em;text-transform:uppercase;color:var(--acc);font-weight:700;border:1px solid rgba(61,139,255,.4);border-radius:20px;padding:5px 14px;margin-bottom:14px}
+.logo{font-size:1.8rem;font-weight:800;letter-spacing:.5px}
+.logo span{color:var(--acc)}
+h1{font-size:2.05rem;line-height:1.28;margin:16px 0 14px;font-weight:800;max-width:860px;margin-left:auto;margin-right:auto}
+h2{font-size:1.6rem;margin:52px 0 8px;font-weight:800}
+h3{font-size:1.15rem;margin:18px 0 8px}
+p{color:var(--mut);margin:10px 0}
+.sub{font-size:1.06rem;max-width:760px;margin:0 auto}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:28px;margin:24px 0;box-shadow:0 10px 30px rgba(0,0,0,.25)}
+.acc{color:var(--acc);font-weight:700}
+.ok{color:var(--ok)}
+.bad{color:var(--bad)}
+.cta{display:inline-block;background:linear-gradient(135deg,var(--acc),var(--acc2));color:#fff;font-weight:800;border-radius:10px;padding:15px 28px;text-decoration:none;margin:14px 8px 8px 0;font-size:1.02rem;box-shadow:0 6px 22px var(--acc-glow);transition:transform .15s, box-shadow .15s}
+.cta:hover{transform:translateY(-2px);box-shadow:0 10px 30px rgba(61,139,255,.42)}
+.cta.sec{background:transparent;border:1px solid var(--line);color:var(--fg);box-shadow:none}
+form{margin-top:16px}
+label{display:block;font-size:.9rem;color:var(--mut);margin:12px 0 5px}
+input,select,textarea{width:100%;background:#0d1520;border:1px solid var(--line);color:var(--fg);border-radius:10px;padding:12px 14px;font-size:1rem}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--acc);box-shadow:0 0 0 3px var(--acc-soft)}
+button{background:linear-gradient(135deg,var(--acc),var(--acc2));color:#fff;border:none;border-radius:10px;padding:13px 20px;font-size:1rem;font-weight:700;cursor:pointer;margin-top:14px}
+.hint{font-size:.82rem;color:var(--mut)}
+.step{display:grid;grid-template-columns:60px 1fr;gap:16px;align-items:start;margin-top:20px}
+.step:first-child{margin-top:4px}
+.step .ico{width:60px;height:60px;border-radius:16px;background:#0d1520;border:1px solid var(--line);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.step b{display:block;color:var(--fg);margin-bottom:4px;font-size:1.02rem}
+.step span{font-size:.92rem;color:var(--mut)}
+.faq details{background:var(--card);border:1px solid var(--line);border-radius:13px;padding:16px 20px;margin:12px 0}
+.faq summary{font-weight:700;cursor:pointer}
+.faq p{margin-top:10px}
+.avis{background:var(--card);border:1px solid var(--line);border-radius:13px;padding:16px 20px;margin:12px 0}
+.avis b{color:var(--fg)}
+.stars{color:#ffb400;letter-spacing:2px}
+footer{margin-top:56px;text-align:center;font-size:.82rem;color:var(--mut)}
+/* ——— photos (libres de droits, stockées dans assets/) ——— */
+.photo{border-radius:18px;overflow:hidden;border:1px solid var(--line);margin:26px 0;position:relative}
+.photo img{width:100%;height:auto;display:block}
+.photo.dim::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 45%,rgba(14,20,28,.72));pointer-events:none}
+.photo.cap::before{content:attr(data-cap);position:absolute;left:20px;bottom:16px;z-index:2;color:#eaf0f8;font-weight:700;font-size:.95rem;text-shadow:0 2px 12px rgba(0,0,0,.7);max-width:80%}
+.split{display:grid;grid-template-columns:1fr 1fr;gap:32px;align-items:center}
+.split .photo{margin:0}
+/* ——— démo : grille de cartes, jamais de tableau large ——— */
+.optgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin:18px 0}
+.opt{background:#0d1520;border:1px solid var(--line);border-radius:13px;padding:16px;cursor:pointer;transition:border-color .15s,background .15s}
+.opt b{display:block;margin-bottom:5px;font-size:.96rem}
+.opt span{font-size:.8rem;color:var(--mut)}
+.opt.on{border-color:var(--acc);background:var(--acc-soft)}
+#risk-out{border:1px solid var(--acc);background:var(--acc-soft);border-radius:14px;padding:18px;margin-top:18px;display:none;text-align:center}
+#risk-total{font-size:1.5rem}
+#risk-detail{font-size:.95rem;margin-top:8px;color:var(--mut);text-align:left}
+#risk-detail li{margin:6px 0 6px 18px}
+.badge{display:inline-block;background:#123b2b;color:var(--ok);border:1px solid #1e5a41;border-radius:20px;padding:4px 14px;font-size:.8rem;font-weight:700}
+/* ——— étoiles cliquables (avis clients) ——— */
+.stars-in{display:flex;gap:4px;margin:10px 0 4px}
+.stars-in .star{background:transparent;border:none;cursor:pointer;font-size:1.8rem;line-height:1;color:#3a4a5f;padding:2px 4px;transition:color .15s,transform .1s;margin:0}
+.stars-in .star:hover{transform:scale(1.15)}
+.stars-in .star.on{color:#ffb400}
+.stars-in .star:focus{outline:2px solid var(--acc);outline-offset:2px;border-radius:4px}
+/* ——— schémas (SVG authorés) ——— */
+.fig{border:1px solid var(--line);background:#0d1520;border-radius:16px;padding:10px;margin:20px 0 4px}
+.fig svg{width:100%;height:auto;display:block}
+.figcap{font-size:.78rem;color:var(--mut);text-align:center;margin:10px 0 2px}
+.herofig{margin:26px auto 8px;max-width:760px}
+/* ——— effets de scroll (progressive : tout reste visible sans JS) ——— */
+.rv{will-change:opacity,transform}
+@media(max-width:720px){h1{font-size:1.55rem}.optgrid{grid-template-columns:1fr}.step{grid-template-columns:50px 1fr;gap:12px}.step .ico{width:50px;height:50px}.split{grid-template-columns:1fr;gap:20px}}
+</style>
+</head>
+<body>
+<main>
+<header>
+  <div class="eyebrow">Facturation électronique · 1er septembre 2026 · réception obligatoire pour toutes les entreprises</div>
+  <div class="logo">Rece<span>pio</span></div>
+  <h1>Vos fournisseurs vous envoient des factures électroniques que votre logiciel ne lit pas. Les PDF arrivent encore par mail. Les deux doivent finir dans votre comptabilité.</h1>
+  <p class="sub">Depuis le <b style="color:var(--fg)">1er septembre 2026</b>, toute entreprise assujettie à la TVA en France — y compris une micro-entreprise — doit être en mesure de <b style="color:var(--fg)">recevoir</b> des factures électroniques (Factur-X, UBL, CII) via une <b style="color:var(--fg)">plateforme agréée</b> (ex-PDP). Le PDF seul n'est plus un format d'échange valable. Mais vos fournisseurs continuent de vous envoyer des PDF et des scans — et personne ne réconcilie les deux mondes dans vos livres. <b style="color:var(--fg)">Recepio est la couche de réception et de tri pour les deux flux.</b></p>
+
+  <div class="photo dim cap" data-cap="La réception est obligatoire depuis le 1er septembre 2026 — le tri, c'est ce qui prend vos semaines.">
+    <img src="assets/hero.jpg" alt="Comptable et dirigeant travaillant sur des factures et des documents financiers — la réconciliation des factures électroniques et des PDF" loading="eager">
+  </div>
+
+  <p class="rv"><a class="cta" href="#demo">Vérifier ma situation — gratuit</a> <a class="cta sec" href="#pricing">Voir les tarifs</a></p>
+</header>
+
+<div class="split">
+  <div class="rv">
+    <div style="font-size:.74rem;letter-spacing:.16em;text-transform:uppercase;color:var(--acc);font-weight:700;margin-bottom:6px">Exemple concret</div>
+    <h3 style="margin-top:0">Un grossiste, 40 factures fournisseurs par mois, un cabinet qui ressaisit tout.</h3>
+    <p>Une TPE de 9 salariés reçoit ~40 factures par mois de ses fournisseurs : 15 layouts différents, une moitié en PDF scannés, le reste qui commence à arriver en Factur-X via la plateforme agréée choisie à la hâte.</p>
+    <p>Rien n'est lisible par l'ERP : le cabinet ressaisit <b style="color:var(--fg)">6 heures par mois</b> à 45 €/h de temps comptable — <b style="color:var(--fg)">3 240 €/an</b> de facturation perdue — et les mentions obligatoires mal extraites (TVA, SIREN, montant) repartent en aller-retour avec les fournisseurs. Sans plateforme choisie du tout, l'amende démarre à <b style="color:var(--fg)">500 €</b> après mise en demeure, puis <b style="color:var(--fg)">1 000 € par trimestre</b> jusqu'à régularisation.</p>
+    <p class="acc">Recepio : les factures électroniques arrivent via votre plateforme agréée, les PDF via une adresse email dédiée. Les 13 mentions obligatoires sont extraites avec un score de confiance, les factures non conformes sont renvoyées au fournisseur avant d'entrer dans les livres, et le cabinet reçoit un export mensuel propre. À partir de 29 €/mois.</p>
+  </div>
+  <div class="photo rv">
+    <img src="assets/payment.jpg" alt="Dirigeant réglant une facture en ligne — la facture électronique se paie comme les autres, mais sa réception doit être outillée" loading="lazy">
+  </div>
+</div>
+
+<h2>Comment ça marche</h2>
+<div class="card rv">
+  <div class="step">
+    <div class="ico">
+      <svg viewBox="0 0 48 48" width="34" height="34" role="img" aria-label="étape 1 : réceptionner sur les deux rails">
+        <rect x="8" y="10" width="32" height="28" rx="4" fill="none" stroke="#3d8bff" stroke-width="2.4"/>
+        <path d="M8 18 L24 25 L40 18" fill="none" stroke="#3d8bff" stroke-width="2.4"/>
+        <path d="M16 30 H 32" stroke="#9aa7b4" stroke-width="2.4"/>
+      </svg>
+    </div>
+    <div><b>1 · Réceptionner sur les deux rails</b><span>Les factures structurées (Factur-X, UBL, CII) arrivent via la plateforme agréée de votre entreprise ; les PDF et scans continuent d'arriver par une adresse email dédiée. Les deux flux convergent dans une seule file.</span></div>
+  </div>
+  <div class="step">
+    <div class="ico">
+      <svg viewBox="0 0 48 48" width="34" height="34" role="img" aria-label="étape 2 : extraire et vérifier les mentions obligatoires">
+        <path d="M10 12 L38 12 L38 36 L10 36 Z" fill="none" stroke="#3d8bff" stroke-width="2.4"/>
+        <path d="M16 20 H 32 M16 26 H 32 M16 32 H 26" stroke="#9aa7b4" stroke-width="2.2"/>
+        <path d="M34 22 L37 25 L41 19" stroke="#3ddc97" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+    <div><b>2 · Extraire et vérifier, pas deviner</b><span>L'IA lit les layouts arbitraires des fournisseurs et extrait les 13 mentions obligatoires (SIREN, TVA, montants, dates…) avec un score de confiance. Une facture non conforme est renvoyée au fournisseur avant d'entrer dans les livres — l'erreur ne voyage plus jusqu'à la clôture.</span></div>
+  </div>
+  <div class="step">
+    <div class="ico">
+      <svg viewBox="0 0 48 48" width="34" height="34" role="img" aria-label="étape 3 : exporter pour le cabinet">
+        <rect x="8" y="8" width="32" height="32" rx="4" fill="none" stroke="#3d8bff" stroke-width="2.4"/>
+        <path d="M16 20 L24 27 L34 15" fill="none" stroke="#3ddc97" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+    <div><b>3 · Exporter dans les livres, chaque mois</b><span>Un export mensuel prêt pour l'expert-comptable (données structurées, journal des exceptions, historique par client). En marque blanche, c'est l'outil du cabinet : tous ses dossiers, une file d'exceptions, un tableau de bord.</span></div>
+  </div>
+</div>
+
+<div class="card rv" id="demo">
+  <h2 style="margin-top:0">Vérification gratuite — votre réception coûte combien, chaque année ?</h2>
+  <p class="hint">Sélectionnez les formats que vous recevez réellement aujourd'hui. Recepio calcule la part de vos factures que votre équipe doit ressaisir — et ce que ça coûte, chaque année.</p>
+  <div class="optgrid" id="grid">
+    <div class="opt on" data-s="0"><b>Factur-X / UBL / CII</b><span>via une plateforme agréée — lisible, structuré</span></div>
+    <div class="opt" data-s="1"><b>PDF envoyé par email</b><span>format libre, à ressaisir en partie</span></div>
+    <div class="opt" data-s="1"><b>PDF scanné / photo</b><span>à ressaisir entièrement</span></div>
+    <div class="opt" data-s="1"><b>Aucune idée / ça arrive n'importe comment</b><span>pas de plateforme choisie, rien n'est outillé</span></div>
+  </div>
+  <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-top:6px">
+    <div>
+      <label for="vol">Factures fournisseurs par mois</label>
+      <input id="vol" type="number" value="40" min="1" step="1">
+    </div>
+    <div>
+      <label for="hr">Heures de ressaisie par facture non structurée</label>
+      <input id="hr" type="number" value="0.15" min="0" step="0.05">
+    </div>
+  </div>
+  <label for="cost">Coût horaire comptable (€/h)</label>
+  <input id="cost" type="number" value="45" min="1" step="1">
+  <button onclick="run()">Calculer mon coût de réception</button>
+  <div id="risk-out">
+    <div class="badge">D'après vos flux</div>
+    <div class="bad" id="risk-total" style="font-size:1.4rem;margin-top:6px">—</div>
+    <p id="risk-detail" style="text-align:left"></p>
+    <p class="acc" style="margin-top:10px" id="risk-cta">—</p>
+  </div>
+</div>
+
+<div class="card rv">
+  <b>Ce que recevoir vos factures veut dire depuis le 1er septembre 2026</b>
+  <div class="fig">
+    <svg viewBox="0 0 700 210" role="img" aria-label="Deux flux entrent — structuré via plateforme agréée, PDF via email — une seule file triée, un export comptable">
+      <rect width="700" height="210" rx="14" fill="#0b1016"/>
+      <g font-family="Segoe UI,sans-serif">
+        <rect x="26" y="36" width="150" height="62" rx="10" fill="#16202c" stroke="#3a4a5f"/>
+        <text x="101" y="62" text-anchor="middle" font-size="12" fill="#eaf0f8">🚇 Factur-X / UBL / CII</text>
+        <text x="101" y="82" text-anchor="middle" font-size="10.5" fill="#97a7bd">plateforme agréée (ex-PDP)</text>
+        <rect x="26" y="126" width="150" height="62" rx="10" fill="#16202c" stroke="#3a4a5f"/>
+        <text x="101" y="152" text-anchor="middle" font-size="12" fill="#eaf0f8">📄 PDF / scans</text>
+        <text x="101" y="172" text-anchor="middle" font-size="10.5" fill="#97a7bd">adresse email dédiée</text>
+        <rect x="238" y="62" width="150" height="62" rx="10" fill="#16202c" stroke="#3a4a5f"/>
+        <text x="313" y="88" text-anchor="middle" font-size="12" fill="#eaf0f8">🔬 Triage &amp; contrôle</text>
+        <text x="313" y="108" text-anchor="middle" font-size="10.5" fill="#97a7bd">13 mentions · score de confiance</text>
+        <rect x="450" y="62" width="160" height="62" rx="10" fill="#16202c" stroke="#3a4a5f"/>
+        <text x="530" y="88" text-anchor="middle" font-size="12" fill="#eaf0f8">📦 Export comptable</text>
+        <text x="530" y="108" text-anchor="middle" font-size="10.5" fill="#97a7bd">mensuel · prêt à intégrer</text>
+      </g>
+      <path d="M176 67 L238 67 M176 157 L322 157 L322 124" stroke="#3a4a5f" stroke-width="2" fill="none"/>
+      <path d="M388 93 L450 93" stroke="#3a4a5f" stroke-width="2"/>
+      <rect x="214" y="180" width="282" height="22" rx="11" fill="#3d8bff"/>
+      <text x="355" y="195" text-anchor="middle" font-size="13" font-weight="800" fill="#ffffff">un seul flux propre dans vos livres</text>
+    </svg>
+    <p class="figcap">La réforme a créé deux rails incompatibles : le structuré via plateforme agréée, et le reste. Recepio les réconcilie avant votre comptabilité.</p>
+  </div>
+  <p class="hint">Base légale : loi n° 2026-103 du 19 février 2026 (art. 123), décret n° 2026-677 et arrêté du 27 juillet 2026 — le terme officiel est « plateforme agréée » (le sigle PDP est obsolète depuis le 28 juillet 2026). Réception obligatoire pour toutes les entreprises assujetties à la TVA depuis le 1er septembre 2026 ; émission et e-reporting pour tous au 1er septembre 2027.</p>
+</div>
+
+<h2 id="pricing">Tarifs</h2>
+<div class="card rv">
+  <b>Solo — 29 €/mois</b>
+  <p>1 entreprise. Réception double flux (plateforme agréée + adresse email), extraction des 13 mentions obligatoires avec score de confiance, renvoi des factures non conformes, export mensuel prêt pour votre comptable.</p>
+  <p class="hint">Pour une TPE, une micro-entreprise ou un indépendant qui reçoit des factures et ne veut pas y passer ses semaines. L'émission électronique vous attend au 1er septembre 2027 — le jour où elle arrive, votre réception est déjà en ordre.</p>
+  <p><a class="cta" href="https://buy.stripe.com/eVq8wI21t4i7bPr7fF3sI0x" rel="noopener" target="_blank">💳 S'abonner à Solo — 29 €/mois</a></p>
+</div>
+<div class="card rv">
+  <b>Cabinet — 79 €/mois</b>
+  <p>Jusqu'à 10 dossiers clients en marque blanche. Le logo de votre cabinet, tous les inbox de vos clients dans un seul tableau de bord, la file d'exceptions, les relances fournisseurs. L'export mensuel entre directement dans votre outil de production.</p>
+  <p class="hint">C'est le modèle pensé pour les experts-comptables : ~7,90 € par client et par mois, facturés dans vos honoraires — votre marge vient du temps de ressaisie récupéré. Onboarding 149 € par dossier (immatriculation à l'annuaire, choix et branchement de la plateforme).</p>
+  <p><a class="cta" href="https://buy.stripe.com/eVq28kcG7cOD7zb8jJ3sI0y" rel="noopener" target="_blank">💳 S'abonner à Cabinet — 79 €/mois</a></p>
+</div>
+<div class="card rv">
+  <b>Cabinet+ — 199 €/mois</b>
+  <p>Jusqu'à 30 dossiers clients, traitement prioritaire des exceptions, relances fournisseurs automatisées, et un responsable dédié pour la bascule de vos clients avant la fin d'année. Onboarding 149 € par dossier.</p>
+  <p class="hint">La réception est obligatoire depuis le 1er septembre 2026 — chaque client sans plateforme est une amende potentielle (500 € après mise en demeure, puis 1 000 € par trimestre). C'est votre meilleure raison d'appeler vos clients cette semaine.</p>
+  <p><a class="cta" href="https://buy.stripe.com/28EeV6gWn4i71aNarR3sI0z" rel="noopener" target="_blank">💳 S'abonner à Cabinet+ — 199 €/mois</a></p>
+</div>
+<div class="card rv">
+  <div class="split" style="align-items:center">
+    <div>
+      <h3 style="margin-top:0">Le tableau de bord du cabinet</h3>
+      <p>Tous les dossiers de vos clients dans une seule vue : flux entrants, exceptions à traiter, activité par client. Ce que votre équipe regardait chaque matin en ouvrant les boîtes mail — reformaté, priorisé, chez vous.</p>
+    </div>
+    <div class="photo" style="margin:0">
+      <img src="assets/dashboard.jpg" alt="Tableau de bord de réception et de tri des factures : flux entrants, exceptions, activité par client" loading="eager">
+    </div>
+  </div>
+</div>
+
+<h2>Questions fréquentes</h2>
+<div class="faq">
+  <details><summary>Suis-je vraiment concerné par la réception dès maintenant ?</summary>
+  <p>Oui, dès le 1er septembre 2026 — sans exception de taille : toute entreprise assujettie à la TVA en France, y compris une micro-entreprise, doit être en mesure de recevoir des factures électroniques. Concrètement : choisir une plateforme agréée, s'immatriculer dans l'annuaire central et être capable de recevoir et archiver du Factur-X, de l'UBL ou du CII. L'émission et le e-reporting concernent les PME/TPE/micro au 1er septembre 2027.</p></details>
+  <details><summary>C'est quoi, une « plateforme agréée » ? Le PPF ne suffit pas ?</summary>
+  <p>La plateforme agréée (ex-PDP) est un prestataire privé immatriculé par l'État, seul habilité à transmettre vos flux à l'administration. Le Portail Public de Facturation (PPF) est désormais un simple annuaire + concentrateur de données : il n'échange plus de factures. Chaque entreprise doit donc avoir SA plateforme agréée — il y en a 137 immatriculées à ce jour. Recepio se branche au-dessus de celle que vous choisissez : nous ne doublons pas la plateforme, nous normalisons et trions ce qui en sort.</p></details>
+  <details><summary>Mes fournisseurs m'envoient encore des PDF par email. C'est grave ?</summary>
+  <p>Pour la réception, le PDF seul n'est pas un format d'échange valable depuis le 1er septembre 2026 : une facture électronique, c'est un fichier structuré (Factur-X, UBL, CII) transmis via une plateforme. Mais vos fournisseurs vont continuer à vous envoyer des PDF et des scans pendant des mois — c'est précisément le double flux que Recepio gère : le structuré via votre plateforme, le PDF via une adresse email dédiée, le tout dans une seule file normalisée.</p></details>
+  <details><summary>Quelles sont les sanctions si je ne fais rien ?</summary>
+  <p>Absence de plateforme agréée : 500 € après mise en demeure de trois mois, puis 1 000 € par trimestre jusqu'à régularisation. Facture non transmise en format électronique : 50 € par facture, plafonnée à 15 000 €/an. E-reporting manquant : 500 € par transmission, plafonné à 15 000 €/an. Le « droit à l'erreur » et l'approche pédagogique annoncée pour 2026-2027 n'effacent pas la sanction — ils la suspendent si vous régularisez sous 30 jours.</p></details>
+  <details><summary>Mon cabinet comptable peut-il porter Recepio en marque blanche ?</summary>
+  <p>Oui — c'est le modèle prévu : votre logo, vos dossiers, une file d'exceptions, un export qui entre dans votre outil. Vous facturez la réception dans vos honoraires (5-8 €/client/mois) et votre marge vient du temps de ressaisie récupéré. Le cabinet reste l'interlocuteur de l'entreprise ; Recepio reste invisible derrière vous.</p></details>
+  <details><summary>Est-ce que ça remplace ma plateforme agréée ?</summary>
+  <p>Non, et ce n'est pas le but. La plateforme agréée est obligatoire et reste votre rail de conformité (réception, émission, e-reporting). Recepio s'assied au-dessus : il réceptionne les deux flux, normalise les mentions obligatoires, trie les exceptions et prépare l'export comptable. Vous gardez votre plateforme, vous arrêtez la ressaisie.</p></details>
+  <details><summary>Peut-on annuler ?</summary>
+  <p>Oui — mensuel, sans engagement, annulation en un clic depuis la page de paiement Stripe. L'onboarding (149 € par dossier) est facturé une fois, au branchement.</p></details>
+</div>
+
+<div class="card rv">
+  <h3 style="margin-top:0">⭐ Avis clients</h3>
+  <div id="reviews"></div>
+  <hr style="border-color:var(--line);margin:18px 0">
+  <p class="hint">Vous testez Recepio ? Laissez un avis (il part directement à notre équipe) :</p>
+  <form id="revform" onsubmit="return sendReview(event)" style="margin-top:6px">
+    <label>Note (1-5)</label>
+    <div class="stars-in" id="rv_stars" role="radiogroup" aria-label="Note">
+      <button type="button" class="star" data-v="1" aria-label="1 étoile">☆</button>
+      <button type="button" class="star" data-v="2" aria-label="2 étoiles">☆</button>
+      <button type="button" class="star" data-v="3" aria-label="3 étoiles">☆</button>
+      <button type="button" class="star" data-v="4" aria-label="4 étoiles">☆</button>
+      <button type="button" class="star" data-v="5" aria-label="5 étoiles">☆</button>
+      <input type="hidden" id="rv_score" value="5">
+    </div>
+    <p class="hint" id="rv_star_hint">Cliquez sur une étoile pour la remplir — 5 = excellent.</p>
+    <label>Votre email</label>
+    <input type="email" id="rv_email" placeholder="vous@votreentreprise.fr" required>
+    <label>Votre commentaire</label>
+    <textarea id="rv_comment" rows="3" style="width:100%;background:#0d1520;border:1px solid var(--line);color:var(--fg);border-radius:10px;padding:12px" placeholder="Ce qui a fonctionné, ce qui manque…"></textarea>
+    <button type="submit">Envoyer mon avis</button>
+  </form>
+</div>
+
+<div class="card rv" id="start">
+  <h3 style="margin-top:0">Commencer maintenant</h3>
+  <p>La vérification ci-dessus est gratuite et prend 30 secondes. Les formules payantes démarrent à 29 €/mois, payées de façon sécurisée via Stripe. Vous préférez en parler d'abord ? Nous répondons sous 24 h ouvrées :</p>
+  <p style="margin:18px 0"><a class="cta" href="https://buy.stripe.com/eVq8wI21t4i7bPr7fF3sI0x" rel="noopener" target="_blank">💳 S'abonner à Solo — 29 €/mois</a></p>
+  <p class="hint">Un souci de paiement ou une question ? Écrivez-nous — réponse sous 24 h ouvrées :</p>
+  <form id="signform" onsubmit="return signup(event)" style="margin-top:8px">
+    <label>Votre email</label>
+    <input type="email" id="se" placeholder="vous@votreentreprise.fr" required>
+    <label>Votre structure (TPE, indépendant, cabinet comptable…)</label>
+    <input type="text" id="sp" placeholder="TPE — grossiste alimentaire, 9 salariés">
+    <label>Votre situation aujourd'hui</label>
+    <input type="text" id="sa" placeholder="Je reçois des PDF par mail, pas encore de plateforme agréée">
+    <button type="submit">Je préfère être recontacté</button>
+  </form>
+</div>
+
+<footer>Recepio — la couche de réception et de tri de la facturation électronique pour les TPE et leurs cabinets. Sources : loi n° 2026-103 du 19 février 2026 (art. 123), décret n° 2026-677, arrêté du 27 juillet 2026, economie.gouv.fr. · <a href="mailto:nypsus.business@gmail.com" style="color:var(--mut)">Contact</a></footer>
+</main>
+<script>
+function money(n){return n.toLocaleString('fr-FR',{style:'currency',currency:'EUR',maximumFractionDigits:0})}
+function normNum(s){
+  return parseFloat(String(s).replace(/[\s\u00a0\u202f\u2009]/g,'').replace(',','.'))||0;
+}
+function run(){
+  var unstructured=0, total=0;
+  [].slice.call(document.querySelectorAll('#grid .opt')).forEach(function(o){
+    total++;
+    if(o.classList.contains('on')&&o.dataset.s==='1') unstructured++;
+  });
+  var vol=Math.max(1,Math.round(normNum(document.getElementById('vol').value)));
+  var hr=Math.max(0,normNum(document.getElementById('hr').value));
+  var cost=Math.max(1,normNum(document.getElementById('cost').value));
+  var unstructuredAny=(document.querySelector('#grid .opt[data-s="1"].on')!==null);
+  if(!unstructuredAny){
+    alert('Sélectionnez au moins un format non structuré (PDF, scan…).');
+    return;
+  }
+  var ratio=unstructured/total;
+  var hours=Math.round(vol*ratio*hr*12);
+  var euros=Math.round(hours*cost/5)*5;
+  var out=document.getElementById('risk-out');
+  out.style.display='block';
+  document.getElementById('risk-total').textContent=euros+' €/an perdus en ressaisie';
+  var pct=Math.round(ratio*100);
+  var detail='<ul>';
+  detail+='<li>'+unstructured+' format'+((unstructured>1)?'s':'')+' sur '+total+' non structuré'+((unstructured>1)?'s':'')+' → '+pct+' % de vos '+vol+' factures mensuelles à ressaisir, soit ~'+hours+' h par an.</li>';
+  detail+='<li>Au tarif comptable de '+money(cost)+'/h, c\'est <b style="color:var(--fg)">'+money(euros)+' par an</b> — sans compter les erreurs de ressaisie et les allers-retours avec les fournisseurs.</li>';
+  if(document.querySelector('#grid .opt[data-s="1"]:last-child.on')){
+    detail+='<li>Sans plateforme agréée choisie, la sanction démarre à 500 € après mise en demeure, puis 1 000 € par trimestre jusqu\'à régularisation.</li>';
+  }
+  detail+='</ul><p style="margin-left:18px;margin-top:6px">Avec Recepio, les deux flux sont lus et normalisés automatiquement — c\'est ce temps-là qu\'on vous rend, dès ce mois-ci.</p>';
+  document.getElementById('risk-detail').innerHTML=detail;
+  document.getElementById('risk-cta').innerHTML='Votre réception outillée, dès 29 €/mois — <a class="cta" style="margin:8px 0 0" href="https://buy.stripe.com/eVq8wI21t4i7bPr7fF3sI0x" rel="noopener" target="_blank">Outiller ma réception</a>';
+}
+[].slice.call(document.querySelectorAll('#grid .opt')).forEach(function(o){
+  o.addEventListener('click',function(){ o.classList.toggle('on'); run(); });
+});
+['vol','hr','cost'].forEach(function(id){
+  document.getElementById(id).addEventListener('input',run);
+});
+/* ——— étoiles cliquables ——— */
+(function(){
+  var box=document.getElementById('rv_stars');
+  var hidden=document.getElementById('rv_score');
+  var hint=document.getElementById('rv_star_hint');
+  var stars=box.querySelectorAll('.star');
+  function paint(v){
+    stars.forEach(function(st,i){ if(i<v) st.classList.add('on'); else st.classList.remove('on'); });
+    hidden.value=v;
+    hint.textContent='Note : '+v+'/5.';
+  }
+  stars.forEach(function(st){
+    st.addEventListener('click',function(){ paint(parseInt(st.getAttribute('data-v'),10)); });
+  });
+  paint(5);
+})();
+function sendReview(e){
+  e.preventDefault();
+  var score=document.getElementById('rv_score').value;
+  var email=document.getElementById('rv_email').value.trim();
+  var comment=document.getElementById('rv_comment').value.trim();
+  if(!comment){ alert('Écrivez un court commentaire.'); return false; }
+  var subj=encodeURIComponent('Avis Recepio — '+score+'/5');
+  var body=encodeURIComponent('Note : '+score+'/5\n\n'+comment+'\n\n— '+email);
+  window.location.href='mailto:nypsus.business@gmail.com?subject='+subj+'&body='+body;
+  document.getElementById('rv_email').value='';
+  document.getElementById('rv_comment').value='';
+  document.getElementById('revok').innerHTML='Votre email d\'avis a été ouvert — merci.';
+  return false;
+}
+function signup(e){
+  e.preventDefault();
+  var email=document.getElementById('se').value.trim();
+  var sp=document.getElementById('sp').value.trim();
+  var sa=document.getElementById('sa').value.trim();
+  var subj=encodeURIComponent('Recepio — contact');
+  var body=encodeURIComponent('Email : '+email+'\nStructure : '+sp+'\nSituation : '+sa+'\n\nJe préfère être contacté avant de m\'abonner.');
+  window.location.href='mailto:nypsus.business@gmail.com?subject='+subj+'&body='+body;
+  document.getElementById('se').value='';
+  document.getElementById('sp').value='';
+  document.getElementById('sa').value='';
+  document.getElementById('signok').innerHTML='Votre email a été ouvert — nous répondrons sous 24 h ouvrées.';
+  return false;
+}
+/* ——— scroll reveal progressif (fallback 4s, reduced-motion respecté) ——— */
+(function(){
+  var els=[].slice.call(document.querySelectorAll('.rv'));
+  var reduced=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(reduced||!('IntersectionObserver' in window)){
+    els.forEach(function(el){ el.style.opacity='1'; el.style.transform='none'; });
+    return;
+  }
+  els.forEach(function(el){ el.style.opacity='0'; el.style.transform='translateY(14px)'; el.style.transition='opacity .6s ease, transform .6s ease'; });
+  var io=new IntersectionObserver(function(entries){
+    entries.forEach(function(en){ if(en.isIntersecting){ en.target.style.opacity='1'; en.target.style.transform='none'; io.unobserve(en.target); } });
+  },{threshold:.08});
+  els.forEach(function(el){ io.observe(el); });
+  setTimeout(function(){
+    els.forEach(function(el){ el.style.opacity='1'; el.style.transform='none'; });
+  },4000);
+})();
+</script>
+</body>
+</html>
