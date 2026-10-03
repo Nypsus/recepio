@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Recepio — la réception de vos factures électroniques, sans y passer vos semaines</title>
 <meta name="description" content="Depuis le 1er septembre 2026, toute entreprise assujettie à la TVA en France doit pouvoir recevoir des factures électroniques (Factur-X, UBL, CII) via une plateforme agréée. Les PDF arrivent encore par mail. Recepio réceptionne, normalise et trie les deux flux dans votre comptabilité — à partir de 29 €/mois.">
+<script>document.documentElement.classList.add('js')</script>
 <style>
 :root{--bg:#0e141c;--bg2:#111a24;--card:#16202c;--line:#24344a;--fg:#eaf0f8;--mut:#97a7bd;--acc:#3d8bff;--acc2:#2b6fe0;--acc-soft:rgba(61,139,255,.12);--acc-glow:rgba(61,139,255,.28);--ok:#3ddc97;--bad:#ff5d5d}
 *{box-sizing:border-box;margin:0;padding:0}
@@ -14,6 +15,8 @@ main{max-width:1024px;margin:0 auto;padding:40px 22px 80px}
 header{text-align:center;padding:44px 0 12px;position:relative;background:
   radial-gradient(620px 320px at 50% -120px, rgba(61,139,255,.2), transparent 70%),
   radial-gradient(420px 220px at 12% 8%, rgba(43,111,224,.12), transparent 70%)}
+header::before{content:"";position:absolute;inset:-20% -12%;pointer-events:none;z-index:0;background:radial-gradient(360px 260px at var(--mx,50%) var(--my,0%), rgba(61,139,255,.26), transparent 62%);opacity:var(--glow,.35);transition:opacity .5s ease}
+header>*{position:relative;z-index:1}
 .eyebrow{display:inline-block;font-size:.74rem;letter-spacing:.16em;text-transform:uppercase;color:var(--acc);font-weight:700;border:1px solid rgba(61,139,255,.4);border-radius:20px;padding:5px 14px;margin-bottom:14px}
 .logo{font-size:1.8rem;font-weight:800;letter-spacing:.5px}
 .logo span{color:var(--acc)}
@@ -26,14 +29,14 @@ p{color:var(--mut);margin:10px 0}
 .acc{color:var(--acc);font-weight:700}
 .ok{color:var(--ok)}
 .bad{color:var(--bad)}
-.cta{display:inline-block;background:linear-gradient(135deg,var(--acc),var(--acc2));color:#fff;font-weight:800;border-radius:10px;padding:15px 28px;text-decoration:none;margin:14px 8px 8px 0;font-size:1.02rem;box-shadow:0 6px 22px var(--acc-glow);transition:transform .15s, box-shadow .15s}
+.cta{display:inline-block;text-align:center;background:linear-gradient(135deg,var(--acc),var(--acc2));color:#fff;font-weight:800;border-radius:10px;padding:15px 28px;text-decoration:none;margin:14px 8px 8px 0;font-size:1.02rem;box-shadow:0 6px 22px var(--acc-glow);transition:transform .15s, box-shadow .15s}
 .cta:hover{transform:translateY(-2px);box-shadow:0 10px 30px rgba(61,139,255,.42)}
 .cta.sec{background:transparent;border:1px solid var(--line);color:var(--fg);box-shadow:none}
 form{margin-top:16px}
 label{display:block;font-size:.9rem;color:var(--mut);margin:12px 0 5px}
 input,select,textarea{width:100%;background:#0d1520;border:1px solid var(--line);color:var(--fg);border-radius:10px;padding:12px 14px;font-size:1rem}
 input:focus,select:focus,textarea:focus{outline:none;border-color:var(--acc);box-shadow:0 0 0 3px var(--acc-soft)}
-button{background:linear-gradient(135deg,var(--acc),var(--acc2));color:#fff;border:none;border-radius:10px;padding:13px 20px;font-size:1rem;font-weight:700;cursor:pointer;margin-top:14px}
+button{background:linear-gradient(135deg,var(--acc),var(--acc2));color:#fff;border:none;text-align:center;border-radius:10px;padding:13px 20px;font-size:1rem;font-weight:700;cursor:pointer;margin-top:14px}
 .hint{font-size:.82rem;color:var(--mut)}
 .step{display:grid;grid-template-columns:60px 1fr;gap:16px;align-items:start;margin-top:20px}
 .step:first-child{margin-top:4px}
@@ -49,7 +52,7 @@ button{background:linear-gradient(135deg,var(--acc),var(--acc2));color:#fff;bord
 footer{margin-top:56px;text-align:center;font-size:.82rem;color:var(--mut)}
 /* ——— photos (libres de droits, stockées dans assets/) ——— */
 .photo{border-radius:18px;overflow:hidden;border:1px solid var(--line);margin:26px 0;position:relative}
-.photo img{width:100%;height:auto;display:block}
+.photo img{width:100%;height:auto;display:block;will-change:transform}
 .photo.dim::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 45%,rgba(14,20,28,.72));pointer-events:none}
 .photo.cap::before{content:attr(data-cap);position:absolute;left:20px;bottom:16px;z-index:2;color:#eaf0f8;font-weight:700;font-size:.95rem;text-shadow:0 2px 12px rgba(0,0,0,.7);max-width:80%}
 .split{display:grid;grid-template-columns:1fr 1fr;gap:32px;align-items:center}
@@ -76,19 +79,69 @@ footer{margin-top:56px;text-align:center;font-size:.82rem;color:var(--mut)}
 .fig svg{width:100%;height:auto;display:block}
 .figcap{font-size:.78rem;color:var(--mut);text-align:center;margin:10px 0 2px}
 .herofig{margin:26px auto 8px;max-width:760px}
-/* ——— effets de scroll (progressive : tout reste visible sans JS) ——— */
-.rv{will-change:opacity,transform}
-@media(max-width:720px){h1{font-size:1.55rem}.optgrid{grid-template-columns:1fr}.step{grid-template-columns:50px 1fr;gap:12px}.step .ico{width:50px;height:50px}.split{grid-template-columns:1fr;gap:20px}}
+/* ——— bloc « ce que vous recevez » (visuel fait main) ——— */
+.rx-cols{display:grid;grid-template-columns:1.4fr 1fr;gap:20px;margin:18px 0 6px;align-items:start}
+.rx-mock{background:#0b1016;border:1px solid var(--line);border-radius:14px;overflow:hidden;position:relative}
+.rx-mockbar{display:flex;align-items:center;gap:6px;padding:10px 14px;background:#0d1520;border-bottom:1px solid var(--line)}
+.rx-dot{width:9px;height:9px;border-radius:50%;background:#2b3c52}
+.rx-mocktitle{margin-left:8px;font-size:.78rem;color:var(--mut);letter-spacing:.04em}
+.rx-chans{display:flex;gap:8px;padding:12px 14px 2px;flex-wrap:wrap}
+.rx-chan{font-size:.74rem;font-weight:700;color:var(--fg);background:var(--acc-soft);border:1px solid rgba(61,139,255,.35);border-radius:14px;padding:7px 12px}
+.rx-chan i{color:var(--mut);font-weight:500;font-style:normal;display:block;font-size:.66rem;line-height:1.4}
+.rx-row{display:grid;grid-template-columns:34px 1fr auto;gap:10px;align-items:center;padding:11px 14px;border-top:1px solid var(--line);margin-top:10px}
+.rx-ico{width:34px;height:34px;border-radius:9px;background:#0d1520;border:1px solid var(--line);display:flex;align-items:center;justify-content:center}
+.rx-main b{display:block;font-size:.86rem;color:var(--fg);font-weight:700;line-height:1.35}
+.rx-main span{font-size:.73rem;color:var(--mut)}
+.rx-flag{font-size:.68rem;font-weight:800;border-radius:20px;padding:3px 10px;white-space:nowrap}
+.rx-flag.ok{color:var(--ok);background:#123b2b;border:1px solid #1e5a41}
+.rx-flag.warn{color:#ffcf5d;background:#3a2f12;border:1px solid #5a471e}
+.rx-scan{position:absolute;left:0;right:0;top:0;height:34%;background:linear-gradient(180deg,transparent,rgba(61,139,255,.14),transparent);animation:rxscan 4.8s ease-in-out infinite;pointer-events:none;z-index:2}
+@keyframes rxscan{0%,100%{transform:translateY(-15%);opacity:0}42%{opacity:1}50%{transform:translateY(250%);opacity:.9}58%{opacity:1}}
+.rx-side{display:flex;flex-direction:column;gap:12px}
+.rx-panel{background:#0d1520;border:1px solid var(--line);border-radius:13px;padding:14px 16px}
+.rx-panel b{display:block;font-size:.9rem;color:var(--fg);margin-bottom:4px}
+.rx-panel span{font-size:.78rem;color:var(--mut);display:block}
+.rx-bars{display:flex;align-items:flex-end;gap:6px;height:50px;margin-top:12px}
+.rx-bars i{flex:1;background:linear-gradient(180deg,var(--acc),var(--acc2));border-radius:4px 4px 0 0;transform-origin:bottom;transform:scaleY(1)}
+.rx-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:12px 0 6px}
+.rx-stat{background:#0d1520;border:1px solid var(--line);border-radius:13px;padding:14px 16px}
+.rx-stat b{font-size:1.5rem;color:var(--acc);font-weight:800;display:block;line-height:1.1}
+.rx-stat span{font-size:.78rem;color:var(--mut)}
+.rx-help{margin-top:14px;padding:14px 16px;background:var(--acc-soft);border-radius:12px;font-size:.9rem;color:var(--fg)}
+/* ——— dynamisme piloté par le scroll (doctrine Asgard) ——— */
+#scrollprog{position:fixed;top:0;left:0;height:3px;width:0;z-index:99;background:linear-gradient(90deg,var(--acc),var(--acc2));box-shadow:0 0 14px var(--acc-glow);transition:width .08s linear}
+html.js .rv{opacity:0;transform:translate3d(0,30px,0);clip-path:inset(0 0 100% 0);transition:opacity .75s cubic-bezier(.2,.7,.2,1),transform .75s cubic-bezier(.2,.7,.2,1),clip-path .85s cubic-bezier(.2,.7,.2,1);will-change:opacity,transform}
+html.js .rv.in{opacity:1;transform:none;clip-path:inset(-40px)}
+html.js .rx-bars i{transform:scaleY(0);transition:transform .9s cubic-bezier(.2,.7,.2,1)}
+html.js .rv.in .rx-bars i{transform:scaleY(1)}
+html.js .rx-bars i:nth-child(2){transition-delay:.07s}
+html.js .rx-bars i:nth-child(3){transition-delay:.14s}
+html.js .rx-bars i:nth-child(4){transition-delay:.21s}
+html.js .rx-bars i:nth-child(5){transition-delay:.28s}
+html.js .rx-bars i:nth-child(6){transition-delay:.35s}
+html.js .rx-bars i:nth-child(7){transition-delay:.42s}
+html.js .rx-bars i:nth-child(8){transition-delay:.49s}
+@media(max-width:720px){h1{font-size:1.55rem}.optgrid{grid-template-columns:1fr}.step{grid-template-columns:50px 1fr;gap:12px}.step .ico{width:50px;height:50px}.split{grid-template-columns:1fr;gap:20px}.rx-cols{grid-template-columns:1fr}.rx-stats{grid-template-columns:1fr}}
+@media(max-width:560px){.rx-row{grid-template-columns:30px 1fr;row-gap:6px}.rx-flag{grid-column:2;justify-self:start}}
+@media(prefers-reduced-motion:reduce){
+  html.js .rv{opacity:1;transform:none;clip-path:none;transition:none}
+  html.js .rx-bars i{transform:scaleY(1);transition:none}
+  #scrollprog{display:none}
+  header::before{display:none}
+  .rx-scan{display:none}
+  .cta,.opt,.stars-in .star{transition:none}
+}
 </style>
 </head>
 <body>
+<div id="scrollprog" aria-hidden="true"></div>
 <main>
 <header>
   <div class="eyebrow">Facturation électronique · 1er septembre 2026 · réception obligatoire pour toutes les entreprises</div>
   <div class="logo">Rece<span>pio</span></div>
   <h1>Vos fournisseurs vous envoient des factures électroniques que votre logiciel ne lit pas. Les PDF arrivent encore par mail. Les deux doivent finir dans votre comptabilité.</h1>
 
-  <div class="photo dim cap" data-cap="La réception est obligatoire depuis le 1er septembre 2026 — le tri, c'est ce qui prend vos semaines.">
+  <div class="photo dim cap" data-parallax="0.05" data-cap="La réception est obligatoire depuis le 1er septembre 2026 — le tri, c'est ce qui prend vos semaines.">
     <img src="assets/hero.jpg" alt="Comptable et dirigeant travaillant sur des factures et des documents financiers — la réconciliation des factures électroniques et des PDF" loading="eager">
   </div>
 
@@ -105,7 +158,7 @@ footer{margin-top:56px;text-align:center;font-size:.82rem;color:var(--mut)}
     <p>Rien n'est lisible par l'ERP : le cabinet ressaisit <b style="color:var(--fg)">6 heures par mois</b> à 45 €/h de temps comptable — <b style="color:var(--fg)">3 240 €/an</b> de facturation perdue — et les mentions obligatoires mal extraites (TVA, SIREN, montant) repartent en aller-retour avec les fournisseurs. Sans plateforme choisie du tout, l'amende démarre à <b style="color:var(--fg)">500 €</b> après mise en demeure, puis <b style="color:var(--fg)">1 000 € par trimestre</b> jusqu'à régularisation.</p>
     <p class="acc">Recepio : les factures électroniques arrivent via votre plateforme agréée, les PDF via une adresse email dédiée. Les 13 mentions obligatoires sont extraites avec un score de confiance, les factures non conformes sont renvoyées au fournisseur avant d'entrer dans les livres, et le cabinet reçoit un export mensuel propre. À partir de 29 €/mois.</p>
   </div>
-  <div class="photo rv">
+  <div class="photo rv" data-parallax="0.07">
     <img src="assets/payment.jpg" alt="Dirigeant réglant une facture en ligne — la facture électronique se paie comme les autres, mais sa réception doit être outillée" loading="lazy">
   </div>
 </div>
@@ -202,6 +255,57 @@ footer{margin-top:56px;text-align:center;font-size:.82rem;color:var(--mut)}
   <p class="hint">Base légale : loi n° 2026-103 du 19 février 2026 (art. 123), décret n° 2026-677 et arrêté du 27 juillet 2026 — le terme officiel est « plateforme agréée » (le sigle PDP est obsolète depuis le 28 juillet 2026). Réception obligatoire pour toutes les entreprises assujetties à la TVA depuis le 1er septembre 2026 ; émission et e-reporting pour tous au 1er septembre 2027.</p>
 </div>
 
+<div class="card rv" id="recu">
+  <h3 style="margin-top:0">Ce que vous recevez, concrètement</h3>
+  <p class="hint">Deux canaux de réception, une extraction contrôlée des 13 mentions obligatoires avec score de confiance, les factures non conformes écartées avant la comptabilité, puis un export mensuel — et, en marque blanche, le tableau de bord du cabinet.</p>
+
+  <div class="rx-cols">
+    <div class="rx-mock">
+      <div class="rx-mockbar"><span class="rx-dot"></span><span class="rx-dot"></span><span class="rx-dot"></span><span class="rx-mocktitle">Recepio · file de réception unique</span></div>
+      <div class="rx-chans">
+        <span class="rx-chan">Plateforme agréée <i>Factur-X · UBL · CII</i></span>
+        <span class="rx-chan">Email dédié <i>PDF · scans fournisseurs</i></span>
+      </div>
+      <div class="rx-row">
+        <div class="rx-ico"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M7 3h7l4 4v14H7z" fill="none" stroke="#3d8bff" stroke-width="1.8"/><path d="M14 3v4h4" fill="none" stroke="#3d8bff" stroke-width="1.8"/><path d="M10 13h6M10 16h6" stroke="#9aa7b4" stroke-width="1.6"/></svg></div>
+        <div class="rx-main"><b>Alpha Distribution — Factur-X</b><span>13/13 mentions · SIREN, TVA, montants · score <span class="ok">99 %</span></span></div>
+        <span class="rx-flag ok">Conforme</span>
+      </div>
+      <div class="rx-row">
+        <div class="rx-ico"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M7 3h7l4 4v14H7z" fill="none" stroke="#3d8bff" stroke-width="1.8"/><path d="M14 3v4h4" fill="none" stroke="#3d8bff" stroke-width="1.8"/><path d="M10 13h6M10 16h6" stroke="#9aa7b4" stroke-width="1.6"/></svg></div>
+        <div class="rx-main"><b>Boulangerie Martin — PDF scanné</b><span>12/13 mentions · TVA intracommunautaire absente · score <span class="bad">91 %</span></span></div>
+        <span class="rx-flag warn">À vérifier · renvoyée</span>
+      </div>
+      <div class="rx-row">
+        <div class="rx-ico"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M7 3h7l4 4v14H7z" fill="none" stroke="#3d8bff" stroke-width="1.8"/><path d="M14 3v4h4" fill="none" stroke="#3d8bff" stroke-width="1.8"/><path d="M10 13h6M10 16h6" stroke="#9aa7b4" stroke-width="1.6"/></svg></div>
+        <div class="rx-main"><b>Beta Logistique — UBL</b><span>13/13 mentions · score <span class="ok">98 %</span></span></div>
+        <span class="rx-flag ok">Conforme</span>
+      </div>
+      <span class="rx-scan" aria-hidden="true"></span>
+    </div>
+
+    <div class="rx-side">
+      <div class="rx-panel">
+        <b>Export comptable mensuel</b>
+        <span>Données structurées, journal des exceptions, historique par fournisseur — prêt à intégrer dans votre outil.</span>
+        <div class="rx-bars" aria-hidden="true"><i style="height:45%"></i><i style="height:70%"></i><i style="height:38%"></i><i style="height:86%"></i><i style="height:60%"></i><i style="height:96%"></i><i style="height:52%"></i><i style="height:74%"></i></div>
+      </div>
+      <div class="rx-panel">
+        <b>Marque blanche · dashboard cabinet</b>
+        <span>Votre logo, jusqu'à 30 dossiers clients dans une seule vue : flux entrants, exceptions à traiter, activité par client.</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="rx-stats">
+    <div class="rx-stat"><b><span data-count="13">13</span></b><span>mentions obligatoires extraites et vérifiées par facture</span></div>
+    <div class="rx-stat"><b><span data-count="99">99</span> %</b><span>de confiance moyenne sur les factures structurées</span></div>
+    <div class="rx-stat"><b><span data-count="100">100</span> %</b><span>des deux flux normalisés dans une file unique</span></div>
+  </div>
+
+  <div class="rx-help"><b>En quoi ça vous aide :</b> ce que votre équipe ressaisissait à la main arrive déjà lu, vérifié et trié. Les erreurs se règlent avec le fournisseur avant la comptabilité, et votre cabinet reçoit un export propre chaque mois — sans ouvrir une seule boîte mail.</div>
+</div>
+
 <h2 id="pricing">Tarifs</h2>
 <div class="card rv">
   <b>Solo — 29 €/mois</b>
@@ -227,7 +331,7 @@ footer{margin-top:56px;text-align:center;font-size:.82rem;color:var(--mut)}
       <h3 style="margin-top:0">Le tableau de bord du cabinet</h3>
       <p>Tous les dossiers de vos clients dans une seule vue : flux entrants, exceptions à traiter, activité par client. Ce que votre équipe regardait chaque matin en ouvrant les boîtes mail — reformaté, priorisé, chez vous.</p>
     </div>
-    <div class="photo" style="margin:0">
+    <div class="photo" style="margin:0" data-parallax="0.06">
       <img src="assets/dashboard.jpg" alt="Tableau de bord de réception et de tri des factures : flux entrants, exceptions, activité par client" loading="eager">
     </div>
   </div>
@@ -278,7 +382,7 @@ footer{margin-top:56px;text-align:center;font-size:.82rem;color:var(--mut)}
 <div class="card rv" id="start">
   <h3 style="margin-top:0">Commencer maintenant</h3>
   <p>La vérification ci-dessus est gratuite et prend 30 secondes. Les formules payantes démarrent à 29 €/mois, payées de façon sécurisée via Stripe. Vous préférez en parler d'abord ? Nous répondons sous 24 h ouvrées :</p>
-  <p style="margin:18px 0"><a class="cta" href="https://buy.stripe.com/eVq8wI21t4i7bPr7fF3sI0x" rel="noopener" target="_blank">💳 S'abonner à Solo — 29 €/mois</a></p>
+  <p style="margin:18px 0;text-align:center"><a class="cta" href="https://buy.stripe.com/eVq8wI21t4i7bPr7fF3sI0x" rel="noopener" target="_blank">💳 S'abonner à Solo — 29 €/mois</a></p>
   <p class="hint">Un souci de paiement ou une question ? Écrivez-nous — réponse sous 24 h ouvrées :</p>
   <form id="signform" onsubmit="return signup(event)" style="margin-top:8px">
     <label>Votre email</label>
@@ -362,7 +466,7 @@ function sendReview(e){
   window.location.href='mailto:nypsus.business@gmail.com?subject='+subj+'&body='+body;
   document.getElementById('rv_email').value='';
   document.getElementById('rv_comment').value='';
-  document.getElementById('revok').innerHTML='Votre email d\'avis a été ouvert — merci.';
+  var ok=document.getElementById('revok'); if(ok) ok.innerHTML='Votre email d\'avis a été ouvert — merci.';
   return false;
 }
 function signup(e){
@@ -376,25 +480,115 @@ function signup(e){
   document.getElementById('se').value='';
   document.getElementById('sp').value='';
   document.getElementById('sa').value='';
-  document.getElementById('signok').innerHTML='Votre email a été ouvert — nous répondrons sous 24 h ouvrées.';
+  var ok=document.getElementById('signok'); if(ok) ok.innerHTML='Votre email a été ouvert — nous répondrons sous 24 h ouvrées.';
   return false;
 }
-/* ——— scroll reveal progressif (fallback 4s, reduced-motion respecté) ——— */
+/* ——— dynamisme piloté par le scroll (Asgard) : progression, révélations, parallaxe, compteurs, halo ——— */
 (function(){
-  var els=[].slice.call(document.querySelectorAll('.rv'));
+  var docEl=document.documentElement;
   var reduced=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  if(reduced||!('IntersectionObserver' in window)){
-    els.forEach(function(el){ el.style.opacity='1'; el.style.transform='none'; });
-    return;
+  var els=[].slice.call(document.querySelectorAll('.rv'));
+  var pxs=[].slice.call(document.querySelectorAll('[data-parallax]'));
+  var prog=document.getElementById('scrollprog');
+  var header=document.querySelector('header');
+  var hovering=false;
+
+  function animateCount(el){
+    var target=parseFloat(el.getAttribute('data-count'));
+    if(isNaN(target)){ return; }
+    var dec=parseInt(el.getAttribute('data-decimals')||'0',10);
+    var dur=1100, t0=null;
+    function step(ts){
+      if(t0===null) t0=ts;
+      var p=Math.min(1,(ts-t0)/dur);
+      var e=1-Math.pow(1-p,3);
+      var v=(target*e).toFixed(dec);
+      el.textContent=(dec>0)?v.replace('.',','):String(Math.round(target*e));
+      if(p<1){ requestAnimationFrame(step); } else {
+        el.textContent=(dec>0)?target.toFixed(dec).replace('.',','):String(target);
+      }
+    }
+    requestAnimationFrame(step);
   }
-  els.forEach(function(el){ el.style.opacity='0'; el.style.transform='translateY(14px)'; el.style.transition='opacity .6s ease, transform .6s ease'; });
-  var io=new IntersectionObserver(function(entries){
-    entries.forEach(function(en){ if(en.isIntersecting){ en.target.style.opacity='1'; en.target.style.transform='none'; io.unobserve(en.target); } });
-  },{threshold:.08});
-  els.forEach(function(el){ io.observe(el); });
-  setTimeout(function(){
-    els.forEach(function(el){ el.style.opacity='1'; el.style.transform='none'; });
-  },4000);
+
+  /* barre de progression */
+  function progress(){
+    if(!prog) return;
+    var h=docEl.scrollHeight-window.innerHeight;
+    var p=h>0?(window.pageYOffset||docEl.scrollTop)/h:0;
+    p=Math.max(0,Math.min(1,p));
+    prog.style.width=(p*100).toFixed(2)+'%';
+  }
+
+  /* parallaxe légère des photos */
+  var SCALE=1.12;
+  function parallax(){
+    if(reduced) return;
+    var vh=window.innerHeight;
+    pxs.forEach(function(el){
+      var r=el.getBoundingClientRect();
+      if(r.bottom<-200||r.top>vh+200) return;
+      var f=parseFloat(el.getAttribute('data-parallax'))||0.05;
+      var off=(r.top+r.height/2-vh/2)*f;
+      var allow=r.height*(SCALE-1)/2;
+      if(off>allow) off=allow;
+      if(off<-allow) off=-allow;
+      var img=el.querySelector('img')||el;
+      img.style.transform='translate3d(0,'+off.toFixed(1)+'px,0) scale('+SCALE+')';
+    });
+  }
+
+  /* halo du hero (pointeur + scroll) */
+  function heroGlow(){
+    if(!header||reduced||hovering) return;
+    var g=0.8-(window.pageYOffset||0)/900;
+    if(g<0.25) g=0.25;
+    if(g>0.85) g=0.85;
+    header.style.setProperty('--glow',g.toFixed(2));
+  }
+  if(header&&!reduced){
+    header.addEventListener('pointermove',function(e){
+      var r=header.getBoundingClientRect();
+      header.style.setProperty('--mx',((e.clientX-r.left)/r.width*100).toFixed(1)+'%');
+      header.style.setProperty('--my',((e.clientY-r.top)/r.height*100).toFixed(1)+'%');
+      header.style.setProperty('--glow','1');
+      hovering=true;
+    });
+    header.addEventListener('pointerleave',function(){ hovering=false; heroGlow(); });
+  }
+
+  var ticking=false;
+  function frame(){ ticking=false; progress(); parallax(); heroGlow(); }
+  function req(){ if(!ticking){ ticking=true; requestAnimationFrame(frame); } }
+  window.addEventListener('scroll',req,{passive:true});
+  window.addEventListener('resize',req,{passive:true});
+
+  /* révélations par masque + décalage dégressif + compteurs */
+  if(reduced||!('IntersectionObserver' in window)){
+    els.forEach(function(el){ el.classList.add('in'); });
+  } else {
+    els.forEach(function(el){
+      var sibs=[].slice.call(el.parentNode.children).filter(function(c){ return c.classList&&c.classList.contains('rv'); });
+      var idx=sibs.indexOf(el);
+      if(idx>0) el.style.transitionDelay=(idx*90)+'ms';
+    });
+    var io=new IntersectionObserver(function(entries){
+      entries.forEach(function(en){
+        if(en.isIntersecting){
+          var el=en.target;
+          el.classList.add('in');
+          [].slice.call(el.querySelectorAll('[data-count]')).forEach(animateCount);
+          io.unobserve(el);
+        }
+      });
+    },{threshold:.12,rootMargin:'0px 0px -6% 0px'});
+    els.forEach(function(el){ io.observe(el); });
+    setTimeout(function(){
+      els.forEach(function(el){ el.classList.add('in'); });
+    },4200);
+  }
+
+  progress(); parallax(); heroGlow();
 })();
 </script>
 </body>
