@@ -15,7 +15,7 @@ main{max-width:1024px;margin:0 auto;padding:40px 22px 80px}
 header{text-align:center;padding:44px 0 12px;position:relative;background:
   radial-gradient(620px 320px at 50% -120px, rgba(61,139,255,.2), transparent 70%),
   radial-gradient(420px 220px at 12% 8%, rgba(43,111,224,.12), transparent 70%)}
-header::before{content:"";position:absolute;inset:-20% -12%;pointer-events:none;z-index:0;background:radial-gradient(360px 260px at var(--mx,50%) var(--my,0%), rgba(61,139,255,.26), transparent 62%);opacity:var(--glow,.35);transition:opacity .5s ease}
+header::before{content:"";position:absolute;inset:-18% 0;pointer-events:none;z-index:0;background:radial-gradient(360px 260px at var(--mx,50%) var(--my,0%), rgba(61,139,255,.26), transparent 62%);opacity:var(--glow,.35);transition:opacity .5s ease}
 header>*{position:relative;z-index:1}
 .eyebrow{display:inline-block;font-size:.74rem;letter-spacing:.16em;text-transform:uppercase;color:var(--acc);font-weight:700;border:1px solid rgba(61,139,255,.4);border-radius:20px;padding:5px 14px;margin-bottom:14px}
 .logo{font-size:1.8rem;font-weight:800;letter-spacing:.5px}
@@ -108,25 +108,37 @@ footer{margin-top:56px;text-align:center;font-size:.82rem;color:var(--mut)}
 .rx-stat b{font-size:1.5rem;color:var(--acc);font-weight:800;display:block;line-height:1.1}
 .rx-stat span{font-size:.78rem;color:var(--mut)}
 .rx-help{margin-top:14px;padding:14px 16px;background:var(--acc-soft);border-radius:12px;font-size:.9rem;color:var(--fg)}
-/* ——— dynamisme piloté par le scroll (doctrine Asgard) ——— */
-#scrollprog{position:fixed;top:0;left:0;height:3px;width:0;z-index:99;background:linear-gradient(90deg,var(--acc),var(--acc2));box-shadow:0 0 14px var(--acc-glow);transition:width .08s linear}
-html.js .rv{opacity:0;transform:translate3d(0,30px,0);clip-path:inset(0 0 100% 0);transition:opacity .75s cubic-bezier(.2,.7,.2,1),transform .75s cubic-bezier(.2,.7,.2,1),clip-path .85s cubic-bezier(.2,.7,.2,1);will-change:opacity,transform}
-html.js .rv.in{opacity:1;transform:none;clip-path:inset(-40px)}
-html.js .rx-bars i{transform:scaleY(0);transition:transform .9s cubic-bezier(.2,.7,.2,1)}
-html.js .rv.in .rx-bars i{transform:scaleY(1)}
-html.js .rx-bars i:nth-child(2){transition-delay:.07s}
-html.js .rx-bars i:nth-child(3){transition-delay:.14s}
-html.js .rx-bars i:nth-child(4){transition-delay:.21s}
-html.js .rx-bars i:nth-child(5){transition-delay:.28s}
-html.js .rx-bars i:nth-child(6){transition-delay:.35s}
-html.js .rx-bars i:nth-child(7){transition-delay:.42s}
-html.js .rx-bars i:nth-child(8){transition-delay:.49s}
+/* ——— Lenis (vendoré) : classes natives sans la feuille distante ——— */
+html.lenis,html.lenis body{height:auto}
+.lenis.lenis-smooth{scroll-behavior:auto!important}
+.lenis.lenis-smooth [data-lenis-prevent]{overscroll-behavior:contain}
+.lenis.lenis-stopped{overflow:hidden}
+.lenis.lenis-scrolling iframe{pointer-events:none}
+/* ——— dynamisme piloté par le scroll (doctrine Asgard · GSAP + ScrollTrigger + Lenis) ——— */
+#scrollprog{position:fixed;top:0;left:0;height:3px;width:0;z-index:99;background:linear-gradient(90deg,var(--acc),var(--acc2));box-shadow:0 0 14px var(--acc-glow)}
+/* le masquage n'existe QUE si le moteur JS est actif (html.motion) → repli CSS : contenu visible sans JS */
+html.motion .rv{opacity:0;transform:translate3d(0,30px,0);will-change:opacity,transform}
+html.motion .rx-bars i{transform:scaleY(0);transform-origin:bottom}
+/* scène épinglée « Comment ça marche » */
+.how-wrap{min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding:30px 0}
+.how-wrap h2{margin-top:0}
+html.motion .how-wrap .step{opacity:0;transform:translate3d(0,34px,0)}
+/* deck qui glisse par-dessus le hero */
+.deck{position:relative;z-index:3;margin-top:-34px;padding-top:34px;border-radius:26px 26px 0 0;background:var(--bg);box-shadow:0 -30px 70px rgba(0,0,0,.5)}
+/* photo du livrable */
+.visuel{margin:22px 0 10px}
+.visuel .photo{margin:0;background:#e9eef5}
+.visuel .photo img{display:block}
+.exbadge{position:absolute;top:16px;left:18px;z-index:3;font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;font-weight:800;color:#0f1722;background:rgba(255,255,255,.94);border:1px solid rgba(15,23,34,.14);border-radius:20px;padding:5px 12px}
+
 @media(max-width:720px){h1{font-size:1.55rem}.optgrid{grid-template-columns:1fr}.step{grid-template-columns:50px 1fr;gap:12px}.step .ico{width:50px;height:50px}.split{grid-template-columns:1fr;gap:20px}.rx-cols{grid-template-columns:1fr}.rx-stats{grid-template-columns:1fr}}
 @media(max-width:560px){.rx-row{grid-template-columns:30px 1fr;row-gap:6px}.rx-flag{grid-column:2;justify-self:start}}
 @media(prefers-reduced-motion:reduce){
-  html.js .rv{opacity:1;transform:none;clip-path:none;transition:none}
-  html.js .rx-bars i{transform:scaleY(1);transition:none}
+  html.motion .rv{opacity:1;transform:none}
+  html.motion .rx-bars i{transform:scaleY(1)}
+  html.motion .how-wrap .step{opacity:1;transform:none}
   #scrollprog{display:none}
+  html{scroll-behavior:auto}
   header::before{display:none}
   .rx-scan{display:none}
   .cta,.opt,.stars-in .star{transition:none}
@@ -150,6 +162,7 @@ html.js .rx-bars i:nth-child(8){transition-delay:.49s}
   <p class="rv"><a class="cta" href="#demo">Vérifier ma situation — gratuit</a> <a class="cta sec" href="#pricing">Voir les tarifs</a></p>
 </header>
 
+<div class="deck" data-deck>
 <div class="split">
   <div class="rv">
     <div style="font-size:.74rem;letter-spacing:.16em;text-transform:uppercase;color:var(--acc);font-weight:700;margin-bottom:6px">Exemple concret</div>
@@ -162,9 +175,11 @@ html.js .rx-bars i:nth-child(8){transition-delay:.49s}
     <img src="assets/payment.jpg" alt="Dirigeant réglant une facture en ligne — la facture électronique se paie comme les autres, mais sa réception doit être outillée" loading="lazy">
   </div>
 </div>
+</div>
 
+<section class="how-wrap">
 <h2>Comment ça marche</h2>
-<div class="card rv">
+<div class="card">
   <div class="step">
     <div class="ico">
       <svg viewBox="0 0 48 48" width="34" height="34" role="img" aria-label="étape 1 : réceptionner sur les deux rails">
@@ -195,6 +210,7 @@ html.js .rx-bars i:nth-child(8){transition-delay:.49s}
     <div><b>3 · Exporter dans les livres, chaque mois</b><span>Un export mensuel prêt pour l'expert-comptable (données structurées, journal des exceptions, historique par client). En marque blanche, c'est l'outil du cabinet : tous ses dossiers, une file d'exceptions, un tableau de bord.</span></div>
   </div>
 </div>
+</section>
 
 <div class="card rv" id="demo">
   <h2 style="margin-top:0">Vérification gratuite — votre réception coûte combien, chaque année ?</h2>
@@ -258,6 +274,14 @@ html.js .rx-bars i:nth-child(8){transition-delay:.49s}
 <div class="card rv" id="recu">
   <h3 style="margin-top:0">Ce que vous recevez, concrètement</h3>
   <p class="hint">Deux canaux de réception, une extraction contrôlée des 13 mentions obligatoires avec score de confiance, les factures non conformes écartées avant la comptabilité, puis un export mensuel — et, en marque blanche, le tableau de bord du cabinet.</p>
+
+  <div class="visuel">
+    <div class="photo cap visuel-shot" data-parallax="0.03" data-cap="EXEMPLE — la facture normalisée que reçoit votre cabinet : mentions contrôlées, score de confiance, statut, export du mois.">
+      <span class="exbadge">Exemple — le livrable</span>
+      <img src="assets/livrable-facture.png" alt="Exemple du livrable Recepio : une facture électronique (Élec Pro SAS → SARL Bativerne) normalisée, ses 13 mentions obligatoires extraites avec un score de confiance de 99 %, le badge de conformité, une facture non conforme renvoyée au fournisseur et l'export comptable du mois" loading="lazy">
+    </div>
+    <p class="figcap">EXEMPLE (maquette) — une facture reçue rendue lisible : mentions obligatoires surlignées et numérotées de 1 à 13, score de confiance, badge de conformité, exception renvoyée au fournisseur, et l'export comptable de septembre 2026 prêt pour votre cabinet.</p>
+  </div>
 
   <div class="rx-cols">
     <div class="rx-mock">
@@ -483,112 +507,132 @@ function signup(e){
   var ok=document.getElementById('signok'); if(ok) ok.innerHTML='Votre email a été ouvert — nous répondrons sous 24 h ouvrées.';
   return false;
 }
-/* ——— dynamisme piloté par le scroll (Asgard) : progression, révélations, parallaxe, compteurs, halo ——— */
+</script>
+<script src="assets/vendor/gsap.min.js"></script>
+<script src="assets/vendor/ScrollTrigger.min.js"></script>
+<script src="assets/vendor/lenis.min.js"></script>
+<script>
+/* ——— moteur scroll Asgard — Lenis + GSAP ScrollTrigger ——— */
 (function(){
   var docEl=document.documentElement;
   var reduced=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var els=[].slice.call(document.querySelectorAll('.rv'));
-  var pxs=[].slice.call(document.querySelectorAll('[data-parallax]'));
   var prog=document.getElementById('scrollprog');
   var header=document.querySelector('header');
+  var hasEngine=!!(window.gsap&&window.ScrollTrigger);
+
+  /* Repli : pas de moteur ou mouvement réduit → aucun masquage, contenu visible (CSS .rv par défaut) */
+  if(!hasEngine||reduced){ return; }
+
+  docEl.classList.add('motion');
+  gsap.registerPlugin(ScrollTrigger);
+  gsap.defaults({ease:'power3.out'});
+
+  /* Lenis — défilement lissé branché sur le ticker GSAP */
+  if(window.Lenis){
+    var lenis=new Lenis({lerp:0.09,wheelMultiplier:0.95,smoothWheel:true,anchors:true});
+    lenis.on('scroll',ScrollTrigger.update);
+    gsap.ticker.add(function(t){ lenis.raf(t*1000); });
+    gsap.ticker.lagSmoothing(0);
+  }
+
+  /* barre de progression pilotée par ScrollTrigger */
+  if(prog){ gsap.fromTo(prog,{width:'0%'},{width:'100%',ease:'none',scrollTrigger:{start:0,end:'max',scrub:0.3}}); }
+
+  /* ——— 1. Hero = première scène : cascade d'entrée ——— */
+  gsap.set('header .rv',{autoAlpha:1,y:0});
+  var hero=gsap.timeline({defaults:{duration:.95,ease:'power3.out'}});
+  hero.from('header .eyebrow',{autoAlpha:0,y:16,duration:.7})
+      .from('header .logo',{autoAlpha:0,y:16,duration:.7},'-=.5')
+      .from('header h1',{autoAlpha:0,y:26},'-=.6')
+      .from('header .photo',{autoAlpha:0,y:34,scale:.97},'-=.6')
+      .from('header .sub',{autoAlpha:0,y:20},'-=.62')
+      .from('header .rv',{autoAlpha:0,y:14,duration:.7},'-=.6');
+
+  /* le deck glisse par-dessus le hero */
+  var deck=document.querySelector('[data-deck]');
+  if(deck){ gsap.fromTo(deck,{yPercent:9},{yPercent:0,ease:'none',
+    scrollTrigger:{trigger:header,start:'bottom bottom',end:'bottom 25%',scrub:1,invalidateOnRefresh:true}}); }
+
+  /* halo du hero : pointeur + scrub du scroll */
   var hovering=false;
-
-  function animateCount(el){
-    var target=parseFloat(el.getAttribute('data-count'));
-    if(isNaN(target)){ return; }
-    var dec=parseInt(el.getAttribute('data-decimals')||'0',10);
-    var dur=1100, t0=null;
-    function step(ts){
-      if(t0===null) t0=ts;
-      var p=Math.min(1,(ts-t0)/dur);
-      var e=1-Math.pow(1-p,3);
-      var v=(target*e).toFixed(dec);
-      el.textContent=(dec>0)?v.replace('.',','):String(Math.round(target*e));
-      if(p<1){ requestAnimationFrame(step); } else {
-        el.textContent=(dec>0)?target.toFixed(dec).replace('.',','):String(target);
-      }
-    }
-    requestAnimationFrame(step);
-  }
-
-  /* barre de progression */
-  function progress(){
-    if(!prog) return;
-    var h=docEl.scrollHeight-window.innerHeight;
-    var p=h>0?(window.pageYOffset||docEl.scrollTop)/h:0;
-    p=Math.max(0,Math.min(1,p));
-    prog.style.width=(p*100).toFixed(2)+'%';
-  }
-
-  /* parallaxe légère des photos */
-  var SCALE=1.12;
-  function parallax(){
-    if(reduced) return;
-    var vh=window.innerHeight;
-    pxs.forEach(function(el){
-      var r=el.getBoundingClientRect();
-      if(r.bottom<-200||r.top>vh+200) return;
-      var f=parseFloat(el.getAttribute('data-parallax'))||0.05;
-      var off=(r.top+r.height/2-vh/2)*f;
-      var allow=r.height*(SCALE-1)/2;
-      if(off>allow) off=allow;
-      if(off<-allow) off=-allow;
-      var img=el.querySelector('img')||el;
-      img.style.transform='translate3d(0,'+off.toFixed(1)+'px,0) scale('+SCALE+')';
-    });
-  }
-
-  /* halo du hero (pointeur + scroll) */
-  function heroGlow(){
-    if(!header||reduced||hovering) return;
-    var g=0.8-(window.pageYOffset||0)/900;
-    if(g<0.25) g=0.25;
-    if(g>0.85) g=0.85;
-    header.style.setProperty('--glow',g.toFixed(2));
-  }
-  if(header&&!reduced){
+  if(header){
     header.addEventListener('pointermove',function(e){
       var r=header.getBoundingClientRect();
       header.style.setProperty('--mx',((e.clientX-r.left)/r.width*100).toFixed(1)+'%');
       header.style.setProperty('--my',((e.clientY-r.top)/r.height*100).toFixed(1)+'%');
-      header.style.setProperty('--glow','1');
-      hovering=true;
+      header.style.setProperty('--glow','1'); hovering=true;
     });
-    header.addEventListener('pointerleave',function(){ hovering=false; heroGlow(); });
+    header.addEventListener('pointerleave',function(){ hovering=false; });
+    ScrollTrigger.create({trigger:header,start:'top top',end:'bottom top',scrub:true,
+      onUpdate:function(self){ if(hovering) return; var g=0.85-self.progress*0.62; header.style.setProperty('--glow',Math.max(0.22,g).toFixed(2)); }});
   }
 
-  var ticking=false;
-  function frame(){ ticking=false; progress(); parallax(); heroGlow(); }
-  function req(){ if(!ticking){ ticking=true; requestAnimationFrame(frame); } }
-  window.addEventListener('scroll',req,{passive:true});
-  window.addEventListener('resize',req,{passive:true});
+  /* hero scrubbé : le contenu s'élève et s'efface (timeline construite après l'entrée) */
+  var scrubBuilt=false;
+  function buildScrub(){
+    if(scrubBuilt) return; scrubBuilt=true;
+    gsap.timeline({scrollTrigger:{trigger:header,start:'top top',end:'bottom top',scrub:1}})
+      .to('header .logo, header h1, header .sub, header .eyebrow',{y:-46,autoAlpha:0,stagger:.05,ease:'none'},0)
+      .to('header .photo',{y:-22,scale:.985,ease:'none'},0);
+    ScrollTrigger.refresh();
+  }
+  hero.eventCallback('onComplete',buildScrub);
+  setTimeout(buildScrub,1900);
 
-  /* révélations par masque + décalage dégressif + compteurs */
-  if(reduced||!('IntersectionObserver' in window)){
-    els.forEach(function(el){ el.classList.add('in'); });
-  } else {
-    els.forEach(function(el){
-      var sibs=[].slice.call(el.parentNode.children).filter(function(c){ return c.classList&&c.classList.contains('rv'); });
-      var idx=sibs.indexOf(el);
-      if(idx>0) el.style.transitionDelay=(idx*90)+'ms';
-    });
-    var io=new IntersectionObserver(function(entries){
-      entries.forEach(function(en){
-        if(en.isIntersecting){
-          var el=en.target;
-          el.classList.add('in');
-          [].slice.call(el.querySelectorAll('[data-count]')).forEach(animateCount);
-          io.unobserve(el);
-        }
-      });
-    },{threshold:.12,rootMargin:'0px 0px -6% 0px'});
-    els.forEach(function(el){ io.observe(el); });
-    setTimeout(function(){
-      els.forEach(function(el){ el.classList.add('in'); });
-    },4200);
+  /* ——— 2. Scène épinglée « Comment ça marche » : le scroll déroule les 3 étapes ——— */
+  var steps=gsap.utils.toArray('.how-wrap .step');
+  if(steps.length&&document.querySelector('.how-wrap')){
+    gsap.set(steps,{autoAlpha:0,y:34});
+    gsap.timeline({scrollTrigger:{trigger:'.how-wrap',start:'top top',end:'+=100%',pin:true,scrub:1,anticipatePin:1}})
+      .to(steps,{autoAlpha:1,y:0,duration:1.4,stagger:.5,ease:'power2.out'});
   }
 
-  progress(); parallax(); heroGlow();
+  /* ——— 3. Révélations en cascade (remplace IntersectionObserver) ——— */
+  var rvs=gsap.utils.toArray('.rv').filter(function(el){ return !header||!header.contains(el); });
+  ScrollTrigger.batch(rvs,{
+    start:'top 88%',
+    onEnter:function(b){ gsap.to(b,{autoAlpha:1,y:0,duration:.85,stagger:.09,overwrite:true}); }
+  });
+  function safety(){
+    rvs.forEach(function(el){
+      if(getComputedStyle(el).opacity==='0'){
+        var r=el.getBoundingClientRect();
+        if(r.top<window.innerHeight*0.99&&r.bottom>0){ gsap.to(el,{autoAlpha:1,y:0,duration:.6,overwrite:true}); }
+      }
+    });
+  }
+  window.addEventListener('load',function(){ ScrollTrigger.refresh(); setTimeout(safety,900); });
+  setTimeout(safety,2600);
+
+  /* ——— 4. Parallaxe multi-plans scrubbée ——— */
+  gsap.utils.toArray('[data-parallax]').forEach(function(el){
+    var f=Math.max(0.02,parseFloat(el.getAttribute('data-parallax'))||0.05);
+    var img=el.querySelector('img'); if(!img) return;
+    gsap.set(img,{scale:1.14});
+    gsap.fromTo(img,{yPercent:-f*170},{yPercent:f*170,ease:'none',
+      scrollTrigger:{trigger:el,start:'top bottom',end:'bottom top',scrub:1.2,invalidateOnRefresh:true}});
+  });
+
+  /* ——— 5. Compteurs + barres animées déclenchés au scroll ——— */
+  gsap.utils.toArray('[data-count]').forEach(function(el){
+    var target=parseFloat(el.getAttribute('data-count')); if(isNaN(target)) return;
+    var dec=parseInt(el.getAttribute('data-decimals')||'0',10);
+    var o={v:0};
+    ScrollTrigger.create({trigger:el,start:'top 92%',once:true,onEnter:function(){
+      gsap.to(o,{v:target,duration:1.2,ease:'power3.out',
+        onUpdate:function(){ el.textContent=(dec>0)?o.v.toFixed(dec).replace('.',','):String(Math.round(o.v)); },
+        onComplete:function(){ el.textContent=(dec>0)?target.toFixed(dec).replace('.',','):String(target); }});
+    }});
+  });
+  var bars=gsap.utils.toArray('.rx-bars i');
+  if(bars.length){
+    gsap.set(bars,{scaleY:0,transformOrigin:'bottom'});
+    ScrollTrigger.create({trigger:'.rx-bars',start:'top 92%',once:true,onEnter:function(){
+      gsap.to(bars,{scaleY:1,duration:.95,stagger:.07,ease:'power3.out'});
+    }});
+  }
+
+  window.addEventListener('resize',function(){ ScrollTrigger.refresh(); });
 })();
 </script>
 </body>
